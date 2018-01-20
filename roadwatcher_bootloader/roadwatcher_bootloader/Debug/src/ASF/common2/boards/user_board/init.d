@@ -126,7 +126,10 @@ src/ASF/common2/boards/user_board/init.d \
  ../src/ASF/sam0/drivers/sercom/sercom.h \
  ../src/ASF/sam0/drivers/sercom/usart/usart.h \
  ../src/ASF/sam0/drivers/sercom/usart/usart_interrupt.h \
- ../src/ASF/sam0/drivers/sercom/usart/usart.h
+ ../src/ASF/sam0/drivers/sercom/usart/usart.h \
+ ../src/ASF/sam0/utils/stdio/stdio_serial/stdio_serial.h \
+ ../src/ASF/common/services/serial/serial.h \
+ ../src/ASF/common/services/serial/sam0_usart/usart_serial.h
 
 ../src/asf.h:
 
@@ -385,3 +388,9 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 ../src/ASF/sam0/drivers/sercom/usart/usart_interrupt.h:
 
 ../src/ASF/sam0/drivers/sercom/usart/usart.h:
+
+../src/ASF/sam0/utils/stdio/stdio_serial/stdio_serial.h:
+
+../src/ASF/common/services/serial/serial.h:
+
+../src/ASF/common/services/serial/sam0_usart/usart_serial.h:

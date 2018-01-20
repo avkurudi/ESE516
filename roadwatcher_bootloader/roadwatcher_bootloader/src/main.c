@@ -28,6 +28,8 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 #include <asf.h>
+#include <stdio.h>
+#include <string.h>
 
 struct usart_module usart_instance;#define MAX_RX_BUFFER_LENGTH 5
 volatile uint8_t rx_buffer[MAX_RX_BUFFER_LENGTH];void usart_read_callback(struct usart_module *const usart_module)
@@ -45,9 +47,8 @@ void usart_write_callback(struct usart_module *const usart_module)
 	config_usart.mux_setting = USART_RX_3_TX_2_XCK_3;
 	config_usart.pinmux_pad2 = PINMUX_PA20D_SERCOM3_PAD2;
 	config_usart.pinmux_pad3 = PINMUX_PA21D_SERCOM3_PAD3;
-	while (usart_init(&usart_instance,
-	SERCOM3, &config_usart) != STATUS_OK) {
-	}
+//	while (stdio_serial_init(&usart_instance, SERCOM3, &config_usart) != STATUS_OK){}
+	stdio_serial_init(&usart_instance, SERCOM3, &config_usart);
 	usart_enable(&usart_instance);
 }
 void configure_usart_callbacks(void)
@@ -70,10 +71,17 @@ int main (void)
 	system_interrupt_enable_global();
 	uint8_t string[] = "Hello World!\r\n";
 	usart_write_buffer_wait(&usart_instance, string, sizeof(string));
-	while (true) {
-		usart_read_buffer_job(&usart_instance,
-		(uint8_t *)rx_buffer, MAX_RX_BUFFER_LENGTH);
-	}
+	printf("Hi from printf!\n");
+
+
+	char str1[1];
+
+	while(true)
+	{
+		scanf("%s", str1);
+		printf("%s\n", str1);
+	}
+
 	
 	/* Insert application code here, after the board has been initialized. */
 }

@@ -28,6 +28,10 @@ src\ASF\sam0\utils\cmsis\samd21\source\gcc\startup_samd21.c
 
 src\ASF\sam0\utils\cmsis\samd21\source\system_samd21.c
 
+src\ASF\sam0\utils\stdio\read.c
+
+src\ASF\sam0\utils\stdio\write.c
+
 src\ASF\sam0\utils\syscalls\gcc\syscalls.c
 
 src\main.c
