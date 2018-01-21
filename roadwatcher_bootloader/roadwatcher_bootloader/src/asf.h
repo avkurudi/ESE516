@@ -59,6 +59,9 @@
 // From module: Common build items for user board support templates
 #include <user_board.h>
 
+// From module: Delay routines
+#include <delay.h>
+
 // From module: Generic board support
 #include <board.h>
 
@@ -71,6 +74,16 @@
 // From module: SERCOM Callback API
 #include <sercom.h>
 #include <sercom_interrupt.h>
+
+// From module: SERCOM I2C - Master Mode I2C (Callback APIs)
+#include <i2c_common.h>
+#include <i2c_master.h>
+#include <i2c_master_interrupt.h>
+
+// From module: SERCOM I2C - Slave Mode I2C (Callback APIs)
+#include <i2c_common.h>
+#include <i2c_slave.h>
+#include <i2c_slave_interrupt.h>
 
 // From module: SERCOM USART - Serial Communications (Callback APIs)
 #include <usart.h>

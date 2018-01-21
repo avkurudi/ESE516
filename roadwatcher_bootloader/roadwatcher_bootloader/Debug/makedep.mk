@@ -4,7 +4,17 @@
 
 src\ASF\common2\boards\user_board\init.c
 
+src\ASF\common2\services\delay\sam0\systick_counter.c
+
 src\ASF\common\utils\interrupt\interrupt_sam_nvic.c
+
+src\ASF\sam0\drivers\sercom\i2c\i2c_sam0\i2c_master.c
+
+src\ASF\sam0\drivers\sercom\i2c\i2c_sam0\i2c_master_interrupt.c
+
+src\ASF\sam0\drivers\sercom\i2c\i2c_sam0\i2c_slave.c
+
+src\ASF\sam0\drivers\sercom\i2c\i2c_sam0\i2c_slave_interrupt.c
 
 src\ASF\sam0\drivers\sercom\sercom.c
 
