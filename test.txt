@@ -29,6 +29,7 @@
  */
 #include <asf.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define DATA_LENGTH 1
 static uint8_t wr_buffer[DATA_LENGTH] = {
@@ -131,11 +132,7 @@ void i2c_accel()
 	enum status_code i2c_status_job_write = i2c_master_write_packet_wait(&i2c_master_instance, &wr_packet);
 	delay_us(10);
 	enum status_code i2c_status_job_read = i2c_master_read_packet_wait(&i2c_master_instance, &rd_packet);
-	printf("I2C write status %x= %d\n\r", 0x53, i2c_status_job_write);
-	printf("I2C read status %x= %d\n\r", 0x53, i2c_status_job_read);
 	if(i2c_status_job_read == 0) printf(" Return Value: 0x%x\n\r", rd_buffer[0]);
-	//i2c_master_read_packet_wait(&i2c_master_instance, &rd_packet);
-	delay_ms(1);
 }
 
 
@@ -167,6 +164,8 @@ void configure_adc_temp(void)
 	adc_get_config_defaults(&config_adc_temp);
 	config_adc_temp.reference = ADC_REFERENCE_INT1V;
 	config_adc_temp.positive_input = ADC_POSITIVE_INPUT_TEMP;
+	config_adc_temp.clock_source = GCLK_GENERATOR_1;
+	config_adc_temp.clock_prescaler = ADC_CLOCK_PRESCALER_DIV16;
 	adc_init(&adc_instance, ADC, &config_adc_temp);
 	adc_enable(&adc_instance);
 }
@@ -184,10 +183,11 @@ void gpio_set_pin(char x[],int y)
 	struct port_config config_port_pin;
 	port_get_config_defaults(&config_port_pin);
 	if(0==strcmp(x,"A")) {
-		if(10==y) {
-	port_pin_set_config(PIN_PA10, &config_port_pin);
-	port_pin_set_output_level(PIN_PA10, true);
-	} 
+		if(10==y)
+		{
+			port_pin_set_config(PIN_PA10, &config_port_pin);
+			port_pin_set_output_level(PIN_PA10, true);
+		} 
 	}
 	if(0==strcmp(x,"A")) {
 		if(11==y) {
@@ -237,7 +237,7 @@ void help(void)
 	printf("The function gpio_get [port] [pin number] returns the state of the specified pin. It returns 0 or 1 depending on whether the port is low or high respectively.\nExample: gpio_get A 10\ngpio_get A 11\ngpio_get B 10\n\n");
 	printf("The function mac returns the mac address of the ATWINC chip in standard form ff.ff.ff.ff.ff.ff.\n\n");
 	printf("The function IP returns the IP address of the device in standard format 255.255.255.255.\n\n");
-	printf("The function read_<sensor name> [readings] [interval_ms] returns readings from the specified sensor at the given interval.\n\n");
+	printf("The function read_ADXL345 [readings] [interval_ms] returns readings from the specified sensor at the given interval.\n\n");
 	printf("The function adc_get [port] [pin number] returns the analog value of the given pin\nExample: adc_get A 15.\n\n");
 	printf("The function mcu_temp prints the temperature of the MCU from the on board temp sensor. \n\n");
 	printf("the function i2c_scan prints out a list of addresses for devices on the i2c bus after scanning through all possible 7-bit combinations.\n\n");
@@ -262,6 +262,14 @@ void config_all()
 	system_interrupt_enable_global();
 }
 
+void printArgsUnnecessary(char function[], char arg[])
+{
+	if(0==strcmp(arg, ""))
+	{
+		printf("For future reference, the '%s' command doesn't take that many arguments. \n", function);
+	}
+}
+
 int main (void)
 {
 
@@ -270,28 +278,26 @@ int main (void)
 	#define MAX_INPUT_SIZE 90
 
 	char userInput1[MAX_INPUT_SIZE];
-	//char userInput2[MAX_INPUT_SIZE];
 
 	while(true)
 	{
-		char command[20], arg1[20], arg2[20];
-		printf("please enter which function you would like to perform !\n");
+		char command[20] = "";
+		char arg1[20] = "";
+		char arg2[20] = "";
+		printf("Please enter which function you would like to perform!\n");
 		fgets(userInput1, MAX_INPUT_SIZE, stdin);
-		//printf(userInput);
 		sscanf(userInput1, "%s %s %s", command, arg1, arg2);
-		printf("the command you entered was\n");
-		printf("%s""%s""%s\n",command,arg1,arg2);
-		//printf("%s\n",arg1);
-		//printf("%s\n",arg2);
+		printf("The command you entered was:\n");
+		printf("%s ""%s ""%s \n",command,arg1,arg2);
 		
 		if(0==strcmp(command,"help")) 
 		{
+			printArgsUnnecessary(command, arg1);
 			help();
 		} 
 			
-  else if(0==strcmp(command,"gpio_set")) 
-	  {
-//		  printf(" i am inside gpio_set loop");
+		else if(0==strcmp(command,"gpio_set")) 
+		{
 			if(0==strcmp(arg1,"A")) 
 				{
 				if(0==strcmp(arg2,"10"))
@@ -308,80 +314,129 @@ int main (void)
 				printf("please provide a valid port and pin\n");				
 			}
 				
-	  else if(0==strcmp(command,"gpio_clear"))
-	  {
-		  //		  printf(" i am inside gpio_clear loop");
-		  if(0==strcmp(arg1,"A"))
-		  {
-			  if(0==strcmp(arg2,"10"))
-			  gpio_clear_pin("A",10);
-			  else if(0==strcmp(arg2,"11"))
-			  gpio_clear_pin("A",11);
-		  }
-		  else if(0==strcmp(arg1,"B"))
-		  {
-			  if(0==strcmp(arg2,"10"))
-			  gpio_clear_pin("B",10);
-		  }
-		  else
-		  printf("please provide a valid port and pin\n");
-	  }
+		else if(0==strcmp(command,"gpio_clear"))
+		{
+			//printf(" i am inside gpio_clear loop");
+			if(0==strcmp(arg1,"A"))
+			{
+				if(0==strcmp(arg2,"10"))
+				gpio_clear_pin("A",10);
+				else if(0==strcmp(arg2,"11"))
+				gpio_clear_pin("A",11);
+			}
+			else if(0==strcmp(arg1,"B"))
+			{
+				if(0==strcmp(arg2,"10"))
+				gpio_clear_pin("B",10);
+			}
+			else
+			printf("please provide a valid port and pin\n");
+		}
 	  
-	  else if(0==strcmp(command,"gpio_get"))
-	  {
-		  if(0==strcmp(arg1,"A"))
-		  {
-			  if(0==strcmp(arg2,"10"))
-			  printf("Value of PA10: %d \n", port_pin_get_input_level(PIN_PA10));
-			  else if(0==strcmp(arg2,"11"))
-			  printf("Value of PA11: %d \n", port_pin_get_input_level(PIN_PA11));
-		  }
-		  else if(0==strcmp(arg1,"B"))
-		  {
-			  if(0==strcmp(arg2,"10"))
-			  printf("Value of PB10: %d \n", port_pin_get_input_level(PIN_PB10));
-		  }
-		  else
-		  printf("please provide a valid port and pin\n");  
-	  }		
+		else if(0==strcmp(command,"gpio_get"))
+		{
+			if(0==strcmp(arg1,"A"))
+			{
+				if(0==strcmp(arg2,"10"))
+				printf("Value of PA10: %d \n", port_pin_get_input_level(PIN_PA10));
+				else if(0==strcmp(arg2,"11"))
+				printf("Value of PA11: %d \n", port_pin_get_input_level(PIN_PA11));
+			}
+			else if(0==strcmp(arg1,"B"))
+			{
+				if(0==strcmp(arg2,"10"))
+				printf("Value of PB10: %d \n", port_pin_get_input_level(PIN_PB10));
+			}
+			else
+			printf("please provide a valid port and pin\n");  
+		}		
 	  
-	else if(0==strcmp(command,"mac"))
-		printf("The MAC address of the ATWINC chip in standard form ff.ff.ff.ff.ff.ff\n\n");
-		
-else if(0==strcmp(command,"ip"))
-		printf("the IP address of the device in standard format 255.255.255.255.\n\n");	
-
-//else if(0==strcmp(command,"read_ADXL345"))
-	//	{
-		//	char w[]='0';
-			//while (w<arg1)
-						
-			 // printf("Value of device_ID read from the sensor is : %d \n", port_pin_get_input_level(PIN_PA10));
-	
-
-
-	
-/*		configure_adc();
-		adc_start_conversion(&adc_instance);
-		uint16_t result;
-		do {
-			//Wait for conversion to be done and read out result 
-		} while (adc_read(&adc_instance, &result) == STATUS_BUSY);
-		printf("ADC: %d\n", result);
-
-		configure_adc_temp();
-		adc_start_conversion(&adc_instance);
-		uint16_t result_temp;
-		do {
-			//Wait for conversion to be done and read out result
-		} while (adc_read(&adc_instance, &result_temp) == STATUS_BUSY);
-		//printf("TEMP: %d\n", result_temp);
-		printf("TEMP: %d\n", result_temp);
-		printf("\n");
-		
-/*		
-		i2c_accel(); //I2C Accel not working; wrong type of "read job vs wait"?
-		i2c_scanner();	
-		*/
+		else if(0==strcmp(command,"mac"))
+		{
+			printArgsUnnecessary(command, arg1);
+			printf("The MAC address of the ATWINC chip in standard form ff.ff.ff.ff.ff.ff\n\n");
+		}
+		else if(0==strcmp(command,"ip"))
+		{
+			printArgsUnnecessary(command, arg1);
+			printf("the IP address of the device in standard format 255.255.255.255.\n\n");	
+		}
+		else if(0==strcmp(command,"i2c_scan"))
+		{
+			printArgsUnnecessary(command, arg1);
+			i2c_scanner();
+		}
+		else if(0==strcmp(command, "mcu_temp"))
+		{
+			configure_adc_temp();
+			adc_start_conversion(&adc_instance);
+			uint16_t result_temp;
+			do {
+				//Wait for conversion to be done and read out result
+			} while (adc_read(&adc_instance, &result_temp) == STATUS_BUSY);
+			float temperature = 25*result_temp/600;
+			//TODO: make sure we can print floats to terminal -> check Piazza & optimization settings.
+			printf("MCU temperature: %d\n", temperature);
+			printf("\n");
+			printArgsUnnecessary(command, arg1);
+		}
+		else if(0 == strcmp(command, "adc_get"))
+		{
+			if(0 == strcmp(arg1, "A") && 0==strcmp(arg2, "2"))
+			{
+				configure_adc();
+				adc_start_conversion(&adc_instance);
+				uint16_t result;
+				do {
+					//Wait for conversion to be done and read out result
+				} while (adc_read(&adc_instance, &result) == STATUS_BUSY);
+				printf("ADC: %d\n", result);				
+			}
+			else
+			{
+				printf("That pin isn't valid; please use 'adc_get A 2'.");
+			}
+		}
+		else if(0==strcmp(command, "read_ADXL345"))
+		{
+			int readings = atoi(arg1);
+			int interval_ms = atoi(arg2);
+			for(int i = 0; i<readings; i++)
+			{
+				i2c_accel();
+				delay_ms(interval_ms);
+			}
+			
+		}
+		else if(0 == strcmp(command, "write_RGB-LED"))
+		{
+			if(0==strcmp(arg1, "FF0000"))
+			{
+				gpio_clear_pin("A", 10);
+				gpio_set_pin("A",11);
+				gpio_clear_pin("B", 10);
+			}
+			else if(0==strcmp(arg1, "000000"))
+			{
+				gpio_set_pin("A", 10);
+				gpio_clear_pin("A", 11);
+				gpio_clear_pin("B", 10);
+			}
+			else if(0==strcmp(arg1, "FF0000"))
+			{
+				gpio_clear_pin("A", 10);
+				gpio_clear_pin("A", 11);
+				gpio_set_pin("B", 10);
+			}
+			else
+			{
+				printf("Note: only 0xFF0000, 0x00FF00, and 0x0000FF are supported currently. \n");
+			}
+			printArgsUnnecessary(command, arg2);
+		}
+		else
+		{
+			printf("Sorry, that's not a recognized command.\n Try 'help' to see a list of valid commands. \n");
+		}	
 	}
 }
