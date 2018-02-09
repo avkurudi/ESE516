@@ -164,8 +164,8 @@ void configure_adc_temp(void)
 	adc_get_config_defaults(&config_adc_temp);
 	config_adc_temp.reference = ADC_REFERENCE_INT1V;
 	config_adc_temp.positive_input = ADC_POSITIVE_INPUT_TEMP;
-	config_adc_temp.clock_source = GCLK_GENERATOR_1;
-	config_adc_temp.clock_prescaler = ADC_CLOCK_PRESCALER_DIV16;
+	//config_adc_temp.clock_source = GCLK_GENERATOR_1;
+	//config_adc_temp.clock_prescaler = ADC_CLOCK_PRESCALER_DIV16;
 	adc_init(&adc_instance, ADC, &config_adc_temp);
 	adc_enable(&adc_instance);
 }
@@ -413,20 +413,26 @@ int main (void)
 			if(0==strcmp(arg1, "FF0000"))
 			{
 				gpio_clear_pin("A", 10);
-				gpio_set_pin("A",11);
-				gpio_clear_pin("B", 10);
+				gpio_set_pin("B",10);
+				gpio_clear_pin("A", 11);
 			}
-			else if(0==strcmp(arg1, "000000"))
+			else if(0==strcmp(arg1, "00FF00"))
 			{
 				gpio_set_pin("A", 10);
 				gpio_clear_pin("A", 11);
 				gpio_clear_pin("B", 10);
 			}
-			else if(0==strcmp(arg1, "FF0000"))
+			else if(0==strcmp(arg1, "0000FF"))
 			{
 				gpio_clear_pin("A", 10);
+				gpio_clear_pin("B", 10);
+				gpio_set_pin("A", 11);
+			}
+			else if(0==strcmp(arg1, "000000"))
+			{
+				gpio_clear_pin("A", 10);
+				gpio_clear_pin("B", 10);
 				gpio_clear_pin("A", 11);
-				gpio_set_pin("B", 10);
 			}
 			else
 			{
