@@ -1,1 +1,3 @@
 Record=TopLevelDocument|FileName=main.SchDoc
+Record=SheetSymbol|SourceDocument=main.SchDoc|Designator=sense+actuators|SchDesignator=sense+actuators|FileName=sch_sense+act.schdoc|SymbolType=Normal|RawFileName=sch_sense+act.schdoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=main.SchDoc|Designator=USB & Power|SchDesignator=USB & Power|FileName=sch_pwr.SchDoc|SymbolType=Normal|RawFileName=sch_pwr.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 

@@ -56,6 +56,23 @@ GenerateClassCluster=0
 DocumentUniqueId=ECKYFSBD
 
 [Document2]
+DocumentPath=sch_sense+act.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=2
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=JFUKAGIH
+
+[Document3]
 DocumentPath=ese516_baseComponents (1-29-2018 11-13-32 PM)\Project Outputs for ese516_baseComponents\ese516_baseComponents.IntLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -72,7 +89,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document3]
+[Document4]
 DocumentPath=G5_RoadWatcher.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -89,7 +106,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=GRBHRCBE
 
-[Document4]
+[Document5]
 DocumentPath=G5_RoadWatcher.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -106,14 +123,14 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=MTLQOTEI
 
-[Document5]
+[Document6]
 DocumentPath=sch_pwr.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
 AnnotateSuffix=
 AnnotateScope=All
-AnnotateOrder=-1
+AnnotateOrder=1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
